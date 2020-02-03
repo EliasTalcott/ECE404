@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+
+
+%%% Packages
+%%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage[margin = 1in, headheight = 13.6pt]{geometry}
+\usepackage[linktoc=all]{hyperref}
+%%
+%%%
+
+
+%%% Formatting
+%%
+\parindent 0em
+\parskip 1em
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{\slshape\MakeUppercase{{\myTitle}}}
+\fancyhead[R]{\slshape{\myName}}
+\fancyfoot[C]{\thepage}
+%%
+%%%
+
+
+%%% User defined variables
+%%
+\def \myTitle {ECE 404 Homework 3}
+\def \myName {Elias Talcott}
+\def \myDate {February 6, 2020}
+%%
+%%%
+
+
+\begin{document}
+
+\begin{titlepage}
+\title{\myTitle}
+\author{\myName}
+\date{\myDate}
+\maketitle
+\vspace{1in}
+\tableofcontents
+\thispagestyle{empty}
+\end{titlepage}
+
+\section{Theory Problems}
+
+%%
+% Problem 1
+\subsection{Problem 1}
+Show whether or not the set of remainders $Z_{12}$ forms a group with either one of the modulo addition or modulo multiplication operations.
+
+\textbf{Solution}
+
+%%
+% Problem 2
+\subsection{Problem 2}
+Compute $gcd(29495, 16983)$ using Euclid's Algorithm. Show all the steps.
+
+\textbf{Solution}
+
+%%
+% Problem 3
+\subsection{Problem 3}
+With the help of Bezout's identity, show that if c is a common divisor of two integers $a, b > 0$, then $c\; |\; gcd(a,b)$ (i.e. c is a divisor of $gcd(a,b)$)
+
+\textbf{Solution}
+
+%%
+% Problem 4
+\subsection{Problem 4}
+Use the Extended Euclid's Algorithm to compute by hand the multiplicative inverse of 25 in $Z_{}28$. List all of the steps.
+
+\textbf{Solution}
+
+%%
+% Problem 5
+\subsection{Problem 5}
+In the following, find the smallest possible integer x. Briefly explain how you found the answer to each. You should solve them without using brute-force methods.
+\begin{enumerate}[label=(\alph*)]
+\item $8x \equiv 11\; (\textrm{mod } 13)$
+\item $5x \equiv 3\; (\textrm{mod } 21)$
+\item $8x \equiv 9\; (\textrm{mod } 7)$
+\end{enumerate}
+
+\textbf{Solution}
+\begin{enumerate}[label=(\alph*)]
+\item 
+\item 
+\item 
+\end{enumerate}
+
+\pagebreak
+
+\section{Programming Problem}
+
+Write a program that takes as input a small integer n (say, smaller than 50) and determines if Zn is a field or only a commutative ring. Assume that the operators are modulo n addition and modulo n multiplication. The program should prompt the user to enter the number. Depending upon the input n, it should correctly print out either ``field'' or ``ring''.
+
+\subsection{Python Code}
+\lstinputlisting[language = Python]{Fields.py}
+\pagebreak
+
+\subsection{Code Explanation}
+If an integer n is prime, then its set of residues $Z_n$ along with the addition and multiplication operators form a finite field. This is the case because a prime modulus is relatively prime with each member of its set of residues. If a number is relatively prime with the modulus, then it has a multiplicative inverse (a requirement for a ring to become a field).
+
+My solution simply checks whether the modulus is prime or not. If it is prime, the program prints ``field''. If it is not prime, the program prints ``ring''.
+
+\end{document}

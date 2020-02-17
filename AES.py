@@ -11,8 +11,9 @@
 ###
 
 import sys
-import numpy as np
 from BitVector import *
+
+BLOCKSIZE = 128
 
 ###
 ## Key schedule generation
@@ -29,18 +30,8 @@ def gee(keyword, round_constant, byte_sub_table):
     round_constant = round_constant.gf_multiply_modular(BitVector(intVal = 0x02), AES_modulus, 8)
     return newword, round_constant
 
-def gen_subbytes_table():
-    subBytesTable = []
-    c = BitVector(bitstring='01100011')
-    for i in range(0, 256):
-        a = BitVector(intVal = i, size=8).gf_MI(AES_modulus, 8) if i != 0 else BitVector(intVal=0)
-        a1,a2,a3,a4 = [a.deep_copy() for x in range(4)]
-        a ^= (a1 >> 4) ^ (a2 >> 5) ^ (a3 >> 6) ^ (a4 >> 7) ^ c
-        subBytesTable.append(int(a))
-    return subBytesTable
-
 def gen_key_schedule_256(key_bv):
-    byte_sub_table = gen_subbytes_table()
+    byte_sub_table = subBytesTable
     #  We need 60 keywords (each keyword consists of 32 bits) in the key schedule for
     #  256 bit AES. The 256-bit AES uses the first four keywords to xor the input
     #  block with.  Subsequently, each of the 14 rounds uses 4 keywords from the key
@@ -58,20 +49,18 @@ def gen_key_schedule_256(key_bv):
         elif (i - (i//8)*8) == 4:
             key_words[i] = BitVector(size = 0)
             for j in range(4):
-                key_words[i] += BitVector(intVal =
-                                 byte_sub_table[key_words[i-1][8*j:8*j+8].intValue()], size = 8)
+                key_words[i] += BitVector(intVal = byte_sub_table[key_words[i-1][8*j:8*j+8].intValue()], size = 8)
             key_words[i] ^= key_words[i-8]
         elif ((i - (i//8)*8) > 4) and ((i - (i//8)*8) < 8):
             key_words[i] = key_words[i-8] ^ key_words[i-1]
         else:
             sys.exit("error in key scheduling algo for i = %d" % i)
-
     num_rounds = 14
     round_keys = [None for i in range(num_rounds+1)]
     for i in range(num_rounds+1):
         round_keys[i] = key_words[i*4] + key_words[i*4+1] + key_words[i*4+2] + key_words[i*4+3]
-
     return round_keys
+
 
 ###
 ## Create state array from 128-bit bitvector
@@ -122,6 +111,7 @@ invMixColumnsTable = [[BitVector(hexstring = "0E"), BitVector(hexstring = "0B"),
                       [BitVector(hexstring = "0D"), BitVector(hexstring = "09"), BitVector(hexstring = "0E"), BitVector(hexstring = "0B")],
                       [BitVector(hexstring = "0B"), BitVector(hexstring = "0D"), BitVector(hexstring = "09"), BitVector(hexstring = "0E")]]
 
+# Multiply two 4x4 matrices of BitVectors
 def fourByFourMultiply(a, b):
     c = [[BitVector(size = 8) for x in range(4)] for x in range(4)]
     for i in range(4):
@@ -134,9 +124,6 @@ def fourByFourMultiply(a, b):
 ## Encryption algorithm
 ###
 def encrypt(infile, keyfile, outfile):
-    # Initialize block size
-    BLOCKSIZE = 128
-
     # Create bitvectors for plaintext, key, and ciphertext
     with open(infile, "r") as fpin:
         plaintext_bv = BitVector(textstring = fpin.read())
@@ -152,22 +139,15 @@ def encrypt(infile, keyfile, outfile):
 
     # Encrypt plaintext
     plaintext_bv.pad_from_right(BLOCKSIZE - (len(plaintext_bv) % BLOCKSIZE))
-    numblocks = len(plaintext_bv) // BLOCKSIZE
-    for i in range(numblocks):
+    for i in range(len(plaintext_bv) // BLOCKSIZE):
+        # XOR block with first round key and convert to state array
         bv = plaintext_bv[i * BLOCKSIZE:(i + 1) * BLOCKSIZE]
-
-        # XOR block with first round key
         bv ^= round_keys[0]
-
-        # Convert block to state array
         bv_state = createStateArray(bv)
-
         # Do 14 rounds of processing
         for j in range(14):
             # Substitute bytes
-            for a in range(4):
-                for b in range(4):
-                    bv_state[a][b] = BitVector(size = 8, intVal = subBytesTable[int(bv_state[a][b])])
+            bv_state = [[BitVector(size = 8, intVal = subBytesTable[int(val)]) for val in row] for row in bv_state]
             # Shift rows
             bv_state = shiftRows(bv_state)
             # Mix columns except for last round
@@ -175,9 +155,8 @@ def encrypt(infile, keyfile, outfile):
                 bv_state = fourByFourMultiply(mixColumnsTable, bv_state)
             # Add round key
             bv = deconstructStateArray(bv_state)
-            bv ^= round_keys[j+1]
+            bv ^= round_keys[j + 1]
             bv_state = createStateArray(bv)
-
         # Add encrypted block to ciphertext
         ciphertext_bv += deconstructStateArray(bv_state)
 
@@ -190,9 +169,6 @@ def encrypt(infile, keyfile, outfile):
 ## Decryption algorithm
 ###
 def decrypt(infile, keyfile, outfile):
-    # Initialize block size
-    BLOCKSIZE = 128
-
     # Create bitvectors for the plaintext, ciphertext, and key
     with open(infile, "r") as fpin:
         ciphertext_bv = BitVector(hexstring = fpin.read())
@@ -207,24 +183,17 @@ def decrypt(infile, keyfile, outfile):
     round_keys = gen_key_schedule_256(key_bv)
 
     # Decrypt ciphertext
-    numblocks = len(ciphertext_bv) // BLOCKSIZE
-    for i in range(numblocks):
+    for i in range(len(ciphertext_bv) // BLOCKSIZE):
+        # XOR block with last round key and convert to state array
         bv = ciphertext_bv[i * BLOCKSIZE:(i + 1) * BLOCKSIZE]
-
-        # XOR block with last round key
         bv ^= round_keys[-1]
-
-        # Convert block to state array
         bv_state = createStateArray(bv)
-
         # Do 14 rounds of processing
         for j in range(14):
             # Inverse shift rows
             bv_state = invShiftRows(bv_state)
             # Inverse substitute bytes
-            for a in range(4):
-                for b in range(4):
-                    bv_state[a][b] = BitVector(size = 8, intVal = invSubBytesTable[int(bv_state[a][b])])
+            bv_state = [[BitVector(size=8, intVal = invSubBytesTable[int(val)]) for val in row] for row in bv_state]
             # Add round key
             bv = deconstructStateArray(bv_state)
             bv ^= round_keys[13 - j]
@@ -232,7 +201,6 @@ def decrypt(infile, keyfile, outfile):
             # Inverse mix columns except for last round
             if j != 13:
                 bv_state = fourByFourMultiply(invMixColumnsTable, bv_state)
-
         # Add decrypted block to plaintext
         plaintext_bv += bv
 

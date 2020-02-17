@@ -1,0 +1,13 @@
+# LaTeX files
+Homework4.aux
+Homework4.log
+Homework4.out
+Homework4.synctex.gz
+Homework4.toc
+
+# Testing files
+output.txt
+decrypted.txt
+
+# PyCharm folder
+.idea/

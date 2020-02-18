@@ -100,11 +100,17 @@ $(5x^2 + 2x + 7) \cdot (5x^3 + 3x^2 + 3x + 2)$ is equivalent to $\mathbf{3x^5 + 
 \item
 \[
 	\begin{split}
-		\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}} &= 
+		\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}} &= \displaystyle{2x^2 + \frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x - (x^5 + 6x^4 + 4x^2)}{6x^3 + 3x^2 + 2}}
+		\\
+		&= \displaystyle{2x^2 + \frac{2x^4 + x^3 + 8x}{6x^3 + 3x^2 + 2}}
+		\\
+		&= \displaystyle{2x^2 + 4x + \frac{2x^4 + x^3 + 8x - (2x^4 + x^3 + 8x)}{6x^3 + 3x^2 + 2}}
+		\\
+		&= 2x^2 + 4x
 	\end{split}
 \]
 
-$\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}}$ is equivalent to $\mathbf{}$ in GF(11).
+$\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}}$ is equivalent to $\mathbf{2x^2 + 4x}$ in GF(11).
 
 \end{enumerate}
 
@@ -151,11 +157,15 @@ $(x^2 + 1) - (x^2 + x + 1)$ is equivalent to $\mathbf{x}$ in GF($2^3$).
 \item
 \[
 	\begin{split}
-		\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}} &= 
+		\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}} &= (x^2 + x + 1) \cdot x
+		\\
+		&= (x^2 + x) \oplus (x^2 + 1)
+		\\
+		&= x + 1
 	\end{split}
 \]
 
-$\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}}$ is equivalent to $\mathbf{}$ in GF($2^3$).
+$\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}}$ is equivalent to $\mathbf{x + 1}$ in GF($2^3$).
 
 \end{enumerate}
 

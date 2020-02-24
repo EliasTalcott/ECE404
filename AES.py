@@ -138,7 +138,8 @@ def encrypt(infile, keyfile, outfile):
     round_keys = gen_key_schedule_256(key_bv)
 
     # Encrypt plaintext
-    plaintext_bv.pad_from_right(BLOCKSIZE - (len(plaintext_bv) % BLOCKSIZE))
+    if (len(plaintext_bv) % BLOCKSIZE != 0):
+        plaintext_bv.pad_from_right(BLOCKSIZE - (len(plaintext_bv) % BLOCKSIZE))
     for i in range(len(plaintext_bv) // BLOCKSIZE):
         # XOR block with first round key and convert to state array
         bv = plaintext_bv[i * BLOCKSIZE:(i + 1) * BLOCKSIZE]

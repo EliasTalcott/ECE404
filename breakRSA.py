@@ -8,7 +8,6 @@
 from BitVector import *
 import rsa
 import sys
-import numpy as np
 
 ###
 ## Call syntax:
@@ -16,38 +15,11 @@ import numpy as np
 ## python3 breakRSA.py -c enc1.txt enc2.txt enc3.txt n_1_2_3.txt cracked.txt #Step 3
 ###
 
-BLOCKSIZE = 128
+BLOCKSIZE = 256
 
 ###
 ## Calculate pth root of x
 ###
-# def solve_pRoot(p,y):
-#     p = int(p)
-#     y = int(y)
-#     # Initial guess for xk
-#     try:
-#         xk = int(pow(y,1.0/p))
-#     except:
-#         # Necessary for larger value of y
-#         # Approximate y as 2^a * y0
-#         y0 = y
-#         a = 0
-#         while (y0 > sys.float_info.max):
-#             y0 = y0 >> 1
-#             a += 1
-#         # log xk = log2 y / p
-#         # log xk = (a + log2 y0) / p
-#         xk = int(pow(2.0, ( a + np.log2(float(y0)) )/ p ))
-#
-#     # Solve for x using Newton's Method
-#     err_k = int(pow(xk,p))-y
-#     while (abs(err_k) > 1):
-#         gk = p*int(pow(xk,p-1))
-#         err_k = int(pow(xk,p))-y
-#         xk = int(-err_k/gk) + xk
-#     return xk
-
-
 def solve_pRoot(p, x): #O(lgn) solution
 	#Upper bound u is set to as follows:
 	#We start with the 2**0 and keep increasing the power so that u is 2**1, 2**2, ...
@@ -139,23 +111,23 @@ def crack(encfiles, keyfile, outfile):
     enc_messages = [0] * 3
     for i, encfile in enumerate(encfiles):
         with open(encfile) as fpin:
-            enc_messages[i] = int(BitVector(hexstring = fpin.read()))
+            enc_messages[i] = BitVector(hexstring = fpin.read())
 
     # Read public keys
     with open(keyfile) as fpkey:
         keys = [int(elem) for elem in fpkey.read().splitlines()]
 
     # Crack RSA with CRT
-    a_cubed = crt(enc_messages, keys)
-    a = solve_pRoot(3, a_cubed)
-    result = BitVector(intVal = a).get_text_from_bitvector()
+    result = BitVector(size = 0)
+    for i in range(len(enc_messages[0]) // BLOCKSIZE):
+        block = [int(enc_messages[0][i*BLOCKSIZE:(i+1)*BLOCKSIZE]), int(enc_messages[1][i*BLOCKSIZE:(i+1)*BLOCKSIZE]), int(enc_messages[2][i*BLOCKSIZE:(i+1)*BLOCKSIZE])]
+        a_cubed = crt(block, keys)
+        a = solve_pRoot(3, a_cubed)
+        result += BitVector(size = BLOCKSIZE, intVal = a)[BLOCKSIZE//2:]
 
     # Write cracked message to outfile
-    print("{:e}".format(a_cubed))
-    print("{:e}".format(a))
-    print(result)
     with open(outfile, "w") as fpout:
-        fpout.write(result)
+        fpout.write(result.get_text_from_bitvector())
 
 
 if __name__ == "__main__":

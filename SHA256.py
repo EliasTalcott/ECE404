@@ -189,7 +189,8 @@ class SHA256( object ):
                 c = b
                 b = a
                 a = BitVector(intVal=(int(t1) + int(t2)) & 0xFFFFFFFF, size=32)
-        
+
+
             #  STEP 4 OF THE HASHING ALGORITHM:  The values in the temporary variables a,b,c,d,e,f,g,h 
             #                                    AFTER 64 rounds of processing are now mixed with the 
             #                                    contents of the hash buffer as calculated for the 

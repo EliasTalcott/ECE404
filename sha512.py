@@ -49,11 +49,10 @@ def sigma_0(word):
 def sigma_1(word):
     return (word.deep_copy() >> 19) ^ (word.deep_copy() >> 61) ^ (word.deep_copy().shift_right(6))
 
-def gen_message_schedule(first_block):
+def gen_message_schedule(block):
     # Use first block of message for first 16 words
     schedule = [BitVector(size = 64)] * 80
-    for i in range(16):
-        schedule[i] = first_block[i*WORDSIZE:(i+1)*WORDSIZE]
+    schedule[0:16] = [block[i:i+WORDSIZE] for i in range(0, 16*WORDSIZE, WORDSIZE)]
 
     # Calculate rest of message schedule using first 16 words
     for i in range(16, 80):
@@ -78,7 +77,7 @@ def sigmae(e):
 
 def round_processing(message_schedule, buffers):
     # Keep a copy of original buffers
-    temp = [buffer.deep_copy() for buffer in buffers]
+    temp = [buffer for buffer in buffers]
     # Do 80 rounds of processing
     for i, word in enumerate(message_schedule):
         T1 = add_mod64([temp[7], ch(temp[4], temp[5], temp[6]), sigmae(temp[4]), word, K[i]])
@@ -89,7 +88,7 @@ def round_processing(message_schedule, buffers):
         temp[4] = add_mod64([temp[3], T1])
         temp[3] = temp[2]
         temp[2] = temp[1]
-        temp[1] = temp[1]
+        temp[1] = temp[0]
         temp[0] = add_mod64([T1, T2])
 
     # Add the output of the 80th round back to original buffers

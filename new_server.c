@@ -121,7 +121,7 @@ char * clientComm(int clntSockfd,int * senderBuffSize_addr, int * optlen_addr){
     /* Only copy first MAX_DATA_SIZE bytes from recvBuff into str
     This prevents writing over any memory that is not allocated
     specifically for this string */
-    snprintf(str, MAX_DATA_SIZE, "%s\n", recvBuff);
+    snprintf(str, MAX_DATA_SIZE, "%s\0", recvBuff);
 	
     /* send data to the client */
     if (send(clntSockfd, str, strlen(str), 0) == -1) {

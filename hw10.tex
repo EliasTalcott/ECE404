@@ -98,4 +98,14 @@ This result showed me that the altered return address should be 0x400e18, which 
 
 \verb|AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x18\x0e\x40\x00|
 
+\pagebreak
+
+\section{Modified Server Code}
+
+In order to fix the buffer overflow vulnerability, I allowed only MAX\_DATA\_SIZE bytes to be copied into str. This means that if the user inputs a long string, only the characters that will fit without overwriting other data will be stored in str. This eliminates the risk of overwriting the return address and launching a buffer overflow attack on this server.
+
+\vspace{1cm}
+
+\lstinputlisting[breaklines = True, language = C]{new_server.c}
+
 \end{document}

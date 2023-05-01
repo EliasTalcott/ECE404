@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+
+
+%%% Packages
+%%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage[margin = 1in, headheight = 13.6pt]{geometry}
+\usepackage[linktoc=all]{hyperref}
+%%
+%%%
+
+
+%%% Formatting
+%%
+\parindent 0em
+\parskip 1em
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{\slshape\MakeUppercase{{\myTitle}}}
+\fancyhead[R]{\slshape{\myName}}
+\fancyfoot[C]{\thepage}
+%%
+%%%
+
+
+%%% User defined variables
+%%
+\def \myTitle {ECE 404 Homework 4}
+\def \myName {Elias Talcott}
+\def \myDate {February 18, 2020}
+%%
+%%%
+
+
+\begin{document}
+
+\begin{titlepage}
+\title{\myTitle}
+\author{\myName}
+\date{\myDate}
+\maketitle
+\vspace{1in}
+\tableofcontents
+\thispagestyle{empty}
+\end{titlepage}
+
+\section{Theory Problems}
+
+%%
+% Problem 1
+\subsection{Problem 1}
+Determine the following in GF(11):
+
+\begin{enumerate}[label=(\alph*)]
+\item $(3x^4 + 5x^2 + 10) - (8x^4 + 5x^2 + 2x + 1)$
+\item $(5x^2 + 2x + 7) \cdot (5x^3 + 3x^2 + 3x + 2)$
+\item $\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}}$
+\end{enumerate}
+
+\textbf{Solution}
+
+\begin{enumerate}[label=(\alph*)]
+\item
+\[
+	\begin{split}
+		(3x^4 + 5x^2 + 10) - (8x^4 + 5x^2 + 2x + 1) &= -5x^4 - 2x + 9
+		\\
+		&= (11-5)x^4 + (11-2)x + 9
+		\\
+		&= 6x^4 + 9x + 9
+	\end{split}
+\]
+
+$(3x^4 + 5x^2 + 10) - (8x^4 + 5x^2 + 2x + 1)$ is equivalent to $\mathbf{6x^4 + 9x + 9}$ in GF(11).
+
+\item
+\[
+	\begin{split}
+		(5x^2 + 2x + 7) \cdot (5x^3 + 3x^2 + 3x + 2) &= (25x^5 + 10x^4 + 35x^3) + (15x^4 + 6x^3 + 21x^2)
+		\\
+		&+ (15x^3 + 6x^2 + 21x) + (10x^2 + 4x + 14)
+		\\
+		&= 25x^5 + 25x^4 + 56x^3 + 37x^2 + 25x + 14
+		\\
+		&= 3x^5 + 3x^4 + x^3 + 4x^2 + 3x + 3
+	\end{split}
+\]
+
+$(5x^2 + 2x + 7) \cdot (5x^3 + 3x^2 + 3x + 2)$ is equivalent to $\mathbf{3x^5 + 3x^4 + x^3 + 4x^2 + 3x + 3}$ in GF(11).
+
+\item
+\[
+	\begin{split}
+		\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}} &= \displaystyle{2x^2 + \frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x - (x^5 + 6x^4 + 4x^2)}{6x^3 + 3x^2 + 2}}
+		\\
+		&= \displaystyle{2x^2 + \frac{2x^4 + x^3 + 8x}{6x^3 + 3x^2 + 2}}
+		\\
+		&= \displaystyle{2x^2 + 4x + \frac{2x^4 + x^3 + 8x - (2x^4 + x^3 + 8x)}{6x^3 + 3x^2 + 2}}
+		\\
+		&= 2x^2 + 4x
+	\end{split}
+\]
+
+$\displaystyle{\frac{x^5 + 8x^4 + x^3 + 4x^2 + 8x}{6x^3 + 3x^2 + 2}}$ is equivalent to $\mathbf{2x^2 + 4x}$ in GF(11).
+
+\end{enumerate}
+
+\pagebreak
+
+%%
+% Problem 2
+\subsection{Problem 2}
+For the finite field GF($2^3$), calculate the following for the modulus polynomial $x^3+x^2+1$.
+
+\begin{enumerate}[label=(\alph*)]
+\item $(x^2+x+1) \cdot (x + 1)$
+\item $(x^2 + 1) - (x^2 + x + 1)$
+\item $\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}}$
+\end{enumerate}
+
+\textbf{Solution}
+
+\begin{enumerate}[label=(\alph*)]
+\item
+\[
+	\begin{split}
+		(x^2+x+1) \cdot (x + 1) &= (x^3 + x^2 + x) + (x^2 + x + 1)
+		\\
+		&= x^3 + 2x^2 + 2x + 1
+		\\
+		&= x^3 + 1
+		\\
+		&= x^2
+	\end{split}
+\]
+
+$(x^2+x+1) \cdot (x + 1)$ is equivalent to $\mathbf{x^2}$ in GF($2^3$).
+
+\item
+\[
+	\begin{split}
+		(x^2 + 1) - (x^2 + x + 1) &= x
+	\end{split}
+\]
+
+$(x^2 + 1) - (x^2 + x + 1)$ is equivalent to $\mathbf{x}$ in GF($2^3$).
+
+\item
+\[
+	\begin{split}
+		\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}} &= (x^2 + x + 1) \cdot x
+		\\
+		&= (x^2 + x) \oplus (x^2 + 1)
+		\\
+		&= x + 1
+	\end{split}
+\]
+
+$\displaystyle{\frac{x^2 + x + 1}{x^2 + 1}}$ is equivalent to $\mathbf{x + 1}$ in GF($2^3$).
+
+\end{enumerate}
+
+\pagebreak
+
+
+\section{Programming Problem}
+
+Write a script in Python to implement the AES algorithm with a 256-bit key size. 
+
+\subsection{Python Code}
+\lstinputlisting[language = Python, breaklines=True, postbreak={\hbox{\textcolor{red}{$\hookrightarrow$}}\space}]{AES.py}
+\pagebreak
+
+\subsection{Code Explanation}
+
+My program implements AES encryption and decryption in two separate functions. This is because the order of steps in encryption is different from the order of steps in decryption. 
+
+For encryption, I first XOR each 128-bit block with the first round key, then do 14 rounds of processing. Each round includes substituting bytes, shifting rows, mixing columns, and finally adding the round key. 
+
+For decryption, I first XOR each block with the last round key, then do 14 rounds of processing. The order of each round is inverse shifting rows, inverse substituting bytes, adding the round key, and finally inverse mixing columns.
+
+A number of other functions were used to keep the encrypt and decrypt functions short and readable. For example, creating and deconstructing state arrays, shifting rows, and multiplying matrices were all done in their own separate functions.
+
+When the program is run, it first checks if there is the proper number of arguments and then sends the arguments to the appropriate function based on the "-e" or "-d" input. The files are opened and read/written inside of the encryption and decryption functions. All of the functionality of AES is held within this file, and only the BitVector and sys modules are used.
+
+\end{document}

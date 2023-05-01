@@ -1,0 +1,77 @@
+\documentclass[11pt]{article}
+
+
+%%% Packages
+%%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[margin = 1 in, headheight = 13.6pt]{geometry}
+\usepackage[linktoc=all]{hyperref}
+\usepackage{listings}
+%%
+%%%
+
+
+%%% Formatting
+%%
+\parindent 0em
+\parskip 1em
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{\slshape\MakeUppercase{{\myTitle}}}
+\fancyhead[R]{\slshape{\myName}}
+\fancyfoot[C]{\thepage}
+%%
+%%%
+
+
+%%% User defined variables
+%%
+\def \myTitle {ECE 404 Homework 1}
+\def \myName {Elias Talcott}
+\def \myDate {January 23, 2020}
+%%
+%%%
+
+
+\begin{document}
+
+\begin{titlepage}
+\title{\myTitle}
+\author{\myName}
+\date{\myDate}
+\maketitle
+\vspace{1in}
+\tableofcontents
+\thispagestyle{empty}
+\end{titlepage}
+
+\section{Python Code}
+\lstinputlisting[language = Python]{cryptBreak.py}
+\pagebreak
+
+\section{Plaintext Quote and Key}
+Using the function in cryptBreak.py, I was able to find the following secret message and key with a brute force attack.
+
+\vspace{2mm}
+\textbf{Secret Message:}
+
+It is my belief that nearly any invented quotation, played with confidence, stands a good chance to deceive.
+
+- Mark Twain
+
+\vspace{2mm}
+\textbf{Secret Key:} 25202
+\pagebreak
+
+\section{Code Explanation}
+The decryption algorithm in this problem uses the method of differential XORing to protect against the statistical attack. In this decryption case, differential XORing works by XORing each block with the previously decrypted block and then XORing that result with the decryption key. The resultant block is then added to the decrypted message. Since the first block does not have a previous block to be XORed with, we use a pass phrase to generate a stand-in previous block. This means that in order to successfully decrypt a message, one needs to know both the pass phrase and the decryption key.
+
+In this problem, we are given the pass phrase "Hopes and dreams of a million years" and have to discover the decryption key using a brute force attack. This attack is carried out by iterating through every key in the key space, which has $2^{16} = 65,536$ possibilities. Using the decryption algorithm given in the lecture notes, it takes about 11 seconds to process 1,000 keys, meaning that the brute force attack would at most take $\sim12$ minutes and on average $\sim6$ minutes. Since the key was found to be 25,202, the attack took just under 5 minutes to complete in this case.
+
+\end{document}

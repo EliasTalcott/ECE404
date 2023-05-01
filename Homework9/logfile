@@ -1,0 +1,57 @@
+
+
+
+New message log:
+1
+From etalcott@purdue.edu Thu Apr  2 13:49:54 2020
+ Subject: Spam sports spam
+  Folder: /var/mail/ece404r1						   5438
+
+
+
+New message log:
+2
+procmail: Couldn't determine implicit lockfile from "/usr/sbin/sendmail"
+From etalcott@purdue.edu Thu Apr  2 13:51:20 2020
+ Subject: Bunch of spam
+  Folder: /usr/sbin/sendmail -oi etalcott@purdue.edu			   5370
+
+
+
+New message log:
+3
+From etalcott@purdue.edu Thu Apr  2 13:53:36 2020
+ Subject: More garbage to fill your inbox
+  Folder: /usr/sbin/sendmail -oi etalcott@purdue.edu			   5456
+
+
+
+New message log:
+4
+From msprvs1=183618lK_Bhh3=bounces-1-24@disney.mail.e.sparkpost.com Thu Apr  2 13:57:41 2020
+ Subject: Welcome to ESPN.
+  Folder: spamFolder							  35477
+
+
+
+New message log:
+5
+From em-b4rsb4ybybzb15augzb54qr8tpg61b@m.e.ae.com Thu Apr  2 14:08:15 2020
+ Subject: You're in. Here's your exclusive code
+  Folder: spamFolder							  23026
+
+
+
+New message log:
+6
+From em-b4rsb4ybybzbjpaub4zc1qr8tpg6up@m.e.ae.com Thu Apr  2 14:08:32 2020
+ Subject: Congrats, you made the cut - here's 25% off.
+  Folder: spamFolder							  20530
+
+
+
+New message log:
+7
+From bounce-HP2v41000001713c16ce3ea662bc6e966a4db0014@notifications.dcsg.com Thu Apr  2 14:11:24 2020
+ Subject: Account Activated
+  Folder: spamFolder							  28545
